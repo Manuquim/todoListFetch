@@ -8,5 +8,35 @@
     other sylesheets into your bunde as well, e.j:
     
     import 'relative/path/to/stylesheet.scss';
-
 */
+body{
+    background-color: rgb(223, 244, 244);
+    margin: 120px;
+}
+h1{
+    text-align: center;
+}
+li{
+   border: 2px gray solid;
+   list-style: none;
+   text-align: left;
+   padding: 1px;
+   margin-left:150px;
+   margin-right: 150px;
+   margin-bottom: 1px; 
+   background-color: white;
+   font-size: 20px;
+}
+
+input{
+    border:none;
+    width: 100%;
+}
+#numberItems{
+    margin-left: 185px;
+}
+.fa-trash-alt {
+    float: right;
+    padding-right: 5px;
+    padding-top: 4px;
+}
