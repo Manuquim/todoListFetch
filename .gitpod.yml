@@ -11,3 +11,4 @@ tasks:
 vscode:
   extensions:
     - esbenp.prettier-vscode
+    - ritwickdey.LiveServer

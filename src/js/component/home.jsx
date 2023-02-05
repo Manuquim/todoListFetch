@@ -1,39 +1,130 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect} from 'react';
 
 //create your first component
 const Home = () =>{
-	const [texto,setTexto]=useState("");
-	const [lista,setLista]=useState([]);
+	const [tarea,setTarea]=useState("");
+	const [lista,setLista]=useState([{ label: "", done: false }]);
 
-	return (
-		<div className="container">
-			<h1>TO-DO List</h1>
-			<ul>
-				<li id="first">
-					<input type="text"
-        			onChange={(e) => setTexto(e.target.value)}
-        			value={texto}
-       			 	placeholder="Please, enter new task!!!"
-					onKeyDown={(e) => 
-						{if(e.key=='Enter'&& texto!="")
-							{
-								setLista(lista.concat(texto));
-								setTexto("");
-							}
-						}
-					}	
+	const url='https://assets.breatheco.de/apis/fake/todos/user/Manuquim101';
+
+/*==================METODO POST: DAR DE ALTA USUARIO================*/
+const inicioPost = () => {
+	fetch(url,{
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ mail: '@.com', password: '123' })
+	})
+	.then(res => res.json())
+	.then(res=> {console.log(res);})
+}
+
+/*======================METODO GET============================================*/
+	const getData = () => {
+		fetch(url)
+		.then(response => response.json()) //converts response to json format
+		.then(data => setLista(data))
+		.catch(error=> console.error("Error en getData",error))
+	}
+	/*===============LLAMAMOS A LA FUNCION  POST Y GET================*/
+	const inicioMetodos=() => {
+		inicioPost();
+		getData();
+	}
+	/*==========SE RENDERIZA UNA SOLA VEZ======================*/
+	useEffect (()=>{inicioMetodos()},[])//se renderiza una sola vez
+
+/* =========================METODO PUT======================================= */
+	let myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	let listaTareas= JSON.stringify(lista);//converts a JavaScript value to a JSON string
+	let requestOptions = {
+		method: "PUT",
+		headers: myHeaders,
+		body: listaTareas,
+		redirect: "follow"
+	};
+	fetch(url,requestOptions)
+		.then(response => response.json())
+		.then(data => console.log(data))
+		.catch(error => console.log("error en el put", error));
+
+/*=================METODO DELETE==============================*/
+	const borrarTodo = () =>{
+		fetch(url, {
+			method: 'DELETE'
+		})
+		.then(res => res.json())
+		.then(res=> console.log("borrado",res))
+		setLista([]);
+	};
+
+/*==============ANYADIR TAREA A LA LISTA====================================================*/
+	const anyadirTarea = (evento) => {
+		evento.preventDefault();//si no se pone no funciona¿¿¿¿¿??????
+		
+		if(tarea!==""){
+console.log("dentro de tarea !==cero");
+			setLista([...lista,{label:tarea,done:false}]);//Spread operator
+			console.log("tarea: ",tarea);
+			console.log("dentro de anyadir tarea",lista);
+			setTarea("");
+		}
+		// 
+		/*if (tarea !== "") {
+			let nuevaTarea={label:tarea,done:false};
+			//setLista(lista.concat(nuevaTarea))
+			setLista([...lista,nuevaTarea]);//Spread operator
+			setTarea("");
+		}
+		/*if(e.key==='Enter'){
+			setTarea("")
+			if(tarea!=="")setLista([...lista,{ label: tarea, done: "false" }])
+		}*/
+	};
+/*===============QUITAR TAREA================================================= */
+	const quitarTarea = i =>{
+		let nuevaLista=[];
+		nuevaLista=lista.filter((item)=>item!==lista[i]);	
+		setLista(nuevaLista);
+	};
+
+/*============================================================================*/
+	return(
+		<div className=" mt-5">
+			<div className="row justify-content-center">
+				<div className="col-12 text-center">
+					<h1 className="text-primary">TODO LIST API FETCH</h1>
+					Tienes {lista.length} tareas pendientes
+				</div>
+				<form onSubmit={anyadirTarea} className="col-6 my-2">
+					<input
+						type="text"
+						className="form-control mx-0"					
+						placeholder="Introduzca su tarea"
+						onChange={e =>setTarea(e.target.value)}
+						value={tarea}
 					/>
-				</li>
-				{lista.map((i,item) => 
-					<li>{i} <i class="far fa-trash-alt" 
-					onClick={()=>setLista(lista.filter((x,indexA)=>item!=indexA))}> 
-					</i></li>)
-				}
-			</ul>
-			<div id="numberItems">{lista.length} items</div>
-		</div> 
+				</form>
+			</div>
+			<div className="row justify-content-center my-2">
+				<div className="col-7">
+					<ul className="list-group">
+						{lista.map((element, i) => 
+							<li className="list-group-item" key={i}>
+								 Tarea {i+1}    {element.label} Hecho: {element.done}
+								 <button className="btn btn-primary float-right"
+									onClick={() => {quitarTarea(i);}}>
+									<span>X</span> 
+								</button>							
+							</li> 
+							)
+						}
+					</ul>		
+				</div>	
+			</div>
+		</div>
 	);
-};
-
+}
 export default Home;
