@@ -71,17 +71,6 @@ console.log("dentro de tarea !==cero");
 			console.log("dentro de anyadir tarea",lista);
 			setTarea("");
 		}
-		// 
-		/*if (tarea !== "") {
-			let nuevaTarea={label:tarea,done:false};
-			//setLista(lista.concat(nuevaTarea))
-			setLista([...lista,nuevaTarea]);//Spread operator
-			setTarea("");
-		}
-		/*if(e.key==='Enter'){
-			setTarea("")
-			if(tarea!=="")setLista([...lista,{ label: tarea, done: "false" }])
-		}*/
 	};
 /*===============QUITAR TAREA================================================= */
 	const quitarTarea = i =>{
@@ -113,11 +102,15 @@ console.log("dentro de tarea !==cero");
 					<ul className="list-group">
 						{lista.map((element, i) => 
 							<li className="list-group-item" key={i}>
-								 Tarea {i+1}    {element.label} Hecho: {element.done}
-								 <button className="btn btn-primary float-right"
-									onClick={() => {quitarTarea(i);}}>
+								<div className='grupo'>
+									<h6>Tarea: {i+1}</h6>
+									<p>{element.label}</p>
+									<h6>{element.done ? "Hecho" : "No Hecho"}</h6>
+								 	<button className="btn btn-primary"
+										onClick={() => {quitarTarea(i);}}>
 									<span>X</span> 
-								</button>							
+									</button>
+								</div>							
 							</li> 
 							)
 						}

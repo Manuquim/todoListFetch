@@ -22,6 +22,20 @@ li{
    background-color: white;
    font-size: 18px;
 }
-
+    
+.grupo > h6{
+    display: inline-block;
+    width: 15%;
+}
+.grupo > p{
+        display: inline-block;
+        width: 50%;
+        margin:0;
+}
+.grupo > button{
+    padding: auto;
+    margin-left: 10px;
+    width: 15%;
+}
 
 
